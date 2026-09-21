@@ -1,0 +1,8 @@
+a430d43aedd428377f2ebec639ab9af2  1_data/raw/detect-suspicious-value-transfers-in-poker/actions.parquet
+6e7f5c7351536376c5493abb5eb3d716  1_data/raw/detect-suspicious-value-transfers-in-poker/seats.parquet
+13319144fd58edcdbd25566b6280625d  1_data/raw/detect-suspicious-value-transfers-in-poker/hands.parquet
+be0d00ea45f592ced9fd2ebe8964d61f  1_data/raw/detect-suspicious-value-transfers-in-poker/players.parquet
+c2906a7a6e3fac255a8e1e51ce0e82bf  1_data/raw/detect-suspicious-value-transfers-in-poker/development_labels.csv
+aec1186d0188e38ce3d935487b0ceca8  1_data/raw/detect-suspicious-value-transfers-in-poker/development_evidence.csv
+80fbb3940cb671b93cd2d033c6f2008f  1_data/raw/detect-suspicious-value-transfers-in-poker/evaluation_pairs.csv
+372804363dc3eb3c19c3ebcbee2dade8  1_data/raw/detect-suspicious-value-transfers-in-poker/sample_submission.csv

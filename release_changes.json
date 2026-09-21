@@ -1,0 +1,94 @@
+{
+ "3_src/tpds_paths.py": [],
+ "3_src/tpds_features.py": [],
+ "3_src/tpds_equity.py": [],
+ "3_src/tpds_preflop_eq.py": [],
+ "3_src/tpds_equity_exact.py": [],
+ "3_src/tpds_policy.py": [],
+ "3_src/tpds_augment.py": [],
+ "3_src/tpds_betsize.py": [],
+ "3_src/tpds_direction.py": [],
+ "3_src/tpds_callvalue.py": [],
+ "3_src/tpds_pairstats.py": [],
+ "3_src/tpds_anomaly.py": [],
+ "3_src/tpds_model.py": [],
+ "3_src/tpds_pair_stage.py": [],
+ "3_src/tpds_evidence.py": [],
+ "3_src/tpds_evidence_apply.py": [],
+ "3_src/tpds_rerank.py": [],
+ "3_src/tpds_submit.py": [],
+ "3_src/tpds_gauge.py": [],
+ "3_src/metric.py": [],
+ "3_src/validate_submission.py": [],
+ "5_outputs/eqx_0913/build_presence_contrast.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/eqx_0913/build_presence_contrast_v2.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/eqx_0913/head_rerank_helpers.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/research_0919/band/tw_base.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/research_0919/band/tw_pc.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/research_0919/band/tw_pairpol.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/research_0919/band/tw_chain1.py": [
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/research_0919/band/tw_chain2.py": [
+  "patch: sys.path.insert(0, R + '5_outputs/eqx_0913'); from head_rerank_helpers import context, EXT",
+  "patch:     _dp = R + '5_outputs/research_0916/submission_D2_v038_dom06_demote_pairs.parquet'; Dol",
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/revise_0917/family_clf_eval.py": [
+  "patch: fam.to_parquet(R + '5_outputs/revise_0917/family_clf_eval.parquet')   # (release) moved up",
+  "root literal -> computed repo root (1x)"
+ ],
+ "5_outputs/audit_0917/build_final.py": [
+  "root literal -> computed repo root (1x)",
+  ".venv python -> sys.executable (1x)"
+ ],
+ "5_outputs/pokerbench_0915/pokerbench_features_eval.py": [],
+ "5_outputs/pb_variants_0916/pbni_dev_table.py": [
+  "patch: if all(c in pl.read_parquet_schema(REV / 'gate_frame.parquet') for c in NI):   # (release)",
+  "patch:     bad += (dmax or 0) > 1e-4 or nn > 0; print(f'  {c:26s} max|diff| {dmax}  null mismatch"
+ ],
+ "5_outputs/pb_variants_0916/ni_eval.py": [],
+ "5_outputs/revise_0915/ni_corrected2.py": [
+  "patch: _sc = ROOT / '5_outputs/evsel_0915/dev_candidates_scripts.parquet'   # (release) research-"
+ ],
+ "7_reproduce/merge_seed_sets.py": [],
+ "5_outputs/research_0919/hb_common.py": [],
+ "5_outputs/research_0919/ci_feats.py": [],
+ "5_outputs/research_0919/hb_train3.py": [],
+ "5_outputs/research_0919/hb_apply3.py": [
+  ".venv python -> sys.executable (1x)"
+ ],
+ "5_outputs/pokerbench_0915/build_prompts.py": [],
+ "5_outputs/pokerbench_0915/build_prompts_eval.py": [],
+ "5_outputs/pokerbench_0915/score_vllm.py": [],
+ "7_reproduce/lambda_0912/cloud/accept.py": [],
+ "7_reproduce/lambda_0912/cloud/build_tables.py": [],
+ "7_reproduce/lambda_0912/cloud/checks.py": [],
+ "7_reproduce/lambda_0912/cloud/engine.py": [],
+ "7_reproduce/lambda_0912/cloud/gbfeat.py": [],
+ "7_reproduce/lambda_0912/cloud/gbnll.py": [],
+ "7_reproduce/lambda_0912/cloud/infer.py": [],
+ "7_reproduce/lambda_0912/cloud/make_synth_tables.py": [],
+ "7_reproduce/lambda_0912/cloud/model.py": [],
+ "7_reproduce/lambda_0912/cloud/outputs.py": [],
+ "7_reproduce/lambda_0912/cloud/run_stage.sh": [],
+ "7_reproduce/lambda_0912/cloud/setup.sh": [],
+ "7_reproduce/lambda_0912/cloud/t4_shards.py": [],
+ "7_reproduce/lambda_0912/cloud/train.py": [],
+ "7_reproduce/lambda_0913/cloud/pairpol.py": [],
+ "7_reproduce/lambda_0913/cloud/pairpol_accept.py": [],
+ "7_reproduce/lambda_0913/cloud/run_pairpol.sh": [],
+ "7_reproduce/lambda_0913/cloud/synth_selftest.py": []
+}

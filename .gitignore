@@ -1,0 +1,11 @@
+# data, generated artifacts and environments are never committed (competition data may not be redistributed)
+/1_data/
+/logs/
+/.venv/
+/submission.csv
+/5_outputs/**
+!/5_outputs/**/
+!/5_outputs/**/*.py
+__pycache__/
+*.pyc
+.DS_Store
