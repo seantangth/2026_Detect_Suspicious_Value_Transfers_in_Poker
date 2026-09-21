@@ -26,7 +26,7 @@ moment of the fold.
 
 Over the 77 shared hands, A folded to B's bets 10 times and held the better hand in 5 of them. Against other players' bets A folded 23 times and held the better hand only 4 times. Net result over the shared hands: A −1,109 chips, B +626.
 
-**Plausible benign explanation.** A may be a weak, emotional player: calling stations do chase gutshots and make hopeless "hero" calls, and the same player can over-fold two pair on connected or two-tone boards out of fear of straights and flushes. B is the aggressor in most of their pots (47 bets or raises with A still in the hand). A losing player bleeding chips to the most aggressive player at the table is ordinary, and 10 folds is a small sample.
+**Plausible benign explanation.** A may be a weak, emotional player: calling stations do chase gutshots and make hopeless "hero" calls, and the same player can over-fold two pair on connected or two-tone boards out of fear of straights and flushes. B is the aggressor in most of their pots (47 bets or raises with A still in the hand). A losing player bleeding chips to an aggressive regular is ordinary, and 10 folds is a small sample.
 
 ---
 
