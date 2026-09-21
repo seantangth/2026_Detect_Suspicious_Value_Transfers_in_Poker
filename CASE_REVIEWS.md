@@ -56,7 +56,7 @@ Over 148 shared hands, A folded to B 20 times and held the better hand in 11 (55
 - `HEDDFCDDA4726AA`: three-way pot. B has a pair of kings on Ks 2h Ad 7s (96–100%) and checks the flop and turn. On the river A bets 25 with ten-high, and B folds.
 - `H9E7511DA97CBEF`: A (7s Ah) has a pair of sevens on 7d 6h 8d (59% against B's ace-high) and folds to B's 9-chip bet into 12.
 
-In the 9 hands that became heads-up between them, 9 streets were checked through by both players. Both players ended the period in profit against the table (A +582, B +714). Each folded to the other rarely (6 and 8 times).
+In the 9 hands that became heads-up between them, 9 streets were checked through by both players. Both players won chips over their shared hands (A +582, B +714). Each folded to the other rarely (6 and 8 times).
 
 **Plausible benign explanation.** Checking medium pairs for pot control and folding them to a river bet is standard cautious play, and a river bet into two checks is exactly the line that represents strength. Two solid players who respect each other's bets will produce few big pots against each other and still win from weaker opponents. Nine heads-up hands is also a very small sample.
 
@@ -74,7 +74,7 @@ In the 9 hands that became heads-up between them, 9 streets were checked through
 
 A folded to B 7 times (twice with the better hand); B folded to A 4 times (once).
 
-**Plausible benign explanation.** Slow-playing the nuts in a tiny limped pot hoping the opponent bluffs is a recognised, if weak, tactic. Checking top pair on a paired board in a multiway pot is common pot control. Folding top pair with a queen kicker to a player who bets both the flop and the turn on A-K-T-8, where two pair, sets and a straight are all possible, is conservative but reasonable. Only 3 hands became heads-up between these two players, and both lost chips over the period (A −712, B −397), which does not fit a pair farming the table.
+**Plausible benign explanation.** Slow-playing the nuts in a tiny limped pot hoping the opponent bluffs is a recognised, if weak, tactic. Checking top pair on a paired board in a multiway pot is common pot control. Folding top pair with a queen kicker to a player who bets both the flop and the turn on A-K-T-8, where two pair, sets and a straight are all possible, is conservative but reasonable. Only 3 hands became heads-up between these two players, and both lost chips over their shared hands (A −712, B −397), which does not fit a pair farming the table.
 
 ---
 
@@ -88,6 +88,6 @@ A folded to B 7 times (twice with the better hand); B folded to A 4 times (once)
 - `H6193C8698E5FE6`: B opens to 10 with Ac 9d. A 3-bets from the small blind with Qh 5s, and B folds ace-nine without a fight.
 - `HE52E1B6465DC1F`: B opens with 5s 8s and A defends the big blind. A flops the better hand (Qc 9s on 2h Td 3d, 76%), checks, and folds to B's 15-chip bet.
 
-B folded to A's bets or raises 21 times, the same number as to all other players combined (18). A raised in 6 pre-flop raise wars (three or more raises) and B in 4 during the 73 shared hands.
+B folded to A's bets or raises 21 times, more than to all other players combined (18). A raised in 6 pre-flop raise wars (three or more raises) and B in 4 during the 73 shared hands.
 
 **Plausible benign explanation.** Loose-aggressive players open weak hands and 4-bet as bluffs, and a 4-bet bluff that folds to a 5-bet is the normal way such a bluff ends. A 3-bet with Q5o from the small blind against a wide opener is an aggressive but known exploit, and folding A9o to it is ordinary. Two aggressive regulars at one table will often raise in the same pots, and 73 hands cannot separate style from coordination.
