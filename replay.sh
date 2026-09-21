@@ -3,7 +3,7 @@
 #   re-trained here: stage-1 pair ensemble (LightGBM + CatBoost, arms F and FW), stage-2 head re-ranker + D' rule, family classifier;
 #   re-applied here: evidence-listing decoder (12-seed detectors, evaluation inference and decoding), final assembly.
 # Inputs: raw competition data (1_data/raw/...) + checkpoint (unpacked at the repository root, see README.md).
-# Expected: all three md5 checks report "identical to the submitted file". Runtime ~30 min on 10 cores.
+# Expected: all three md5 checks report "identical to the submitted file". Runtime ~40 min on 10 cores (Apple M4), ~2 h 10 min on a 4-core Kaggle CPU notebook.
 set -euo pipefail
 cd "$(dirname "$0")"
 PY=${PY:-python3}

@@ -2,6 +2,7 @@
 
 Kaggle competition: [Detect Suspicious Value Transfers in Poker](https://www.kaggle.com/competitions/detect-suspicious-value-transfers-in-poker) (Slash).
 Team `seantangth`. Solution write-up: _link_. Case reviews: [`CASE_REVIEWS.md`](CASE_REVIEWS.md).
+Artifacts: Kaggle dataset [`seantangth/tpds-9th-place-artifacts`](https://www.kaggle.com/datasets/seantangth/tpds-9th-place-artifacts).
 
 | selected submission | file | md5 | public | private |
 |---|---|---|---|---|
@@ -10,19 +11,21 @@ Team `seantangth`. Solution write-up: _link_. Case reviews: [`CASE_REVIEWS.md`](
 
 There are two ways to check the submission, both CPU only:
 
-| | what is re-run | inputs | result | time (Apple M4, 10 cores) |
+| | what is re-run | inputs | result | time |
 |---|---|---|---|---|
-| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked) | ~30–40 min |
-| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical (see §5) | ~N h |
+| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked), on macOS arm64 and on Linux x86-64 | ~40 min (Apple M4, 10 cores); ~2 h 10 min (Kaggle CPU notebook, 4 cores) |
+| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical (see §5) | ~4 h (Apple M4, 10 cores) |
 
-The Kaggle notebook _link_ runs the replay on Kaggle.
+The Kaggle notebook [TPDS 9th place - replay of the selected submission](https://www.kaggle.com/code/seantangth/tpds-9th-place-replay-of-the-selected-submission)
+runs the replay in a fresh Kaggle CPU session (Python 3.13 and the pinned packages are installed by the notebook); its run reproduced all
+three files byte for byte.
 
 ## 1. Setup
 
 Python 3.13; the exact package versions are in `requirements.txt`.
 
 ```bash
-git clone <this repository> tpds && cd tpds
+git clone https://github.com/seantangth/2026_Detect_Suspicious_Value_Transfers_in_Poker.git tpds && cd tpds
 python3.13 -m venv .venv && .venv/bin/pip install -r requirements.txt
 # competition data (accept the competition rules first)
 kaggle competitions download -c detect-suspicious-value-transfers-in-poker -p 1_data/raw/detect-suspicious-value-transfers-in-poker
@@ -98,11 +101,15 @@ positive pair IDs; both are resolved at run time from your own copy of the compe
 
 ## 5. Determinism
 
-The replay is byte-identical. The full rebuild is not, for two reasons we measured: polars' multi-threaded `group_by` returns rows in a
+The replay is byte-identical: we ran it on macOS 15.7 (Apple M4) and in a Kaggle CPU notebook (Linux x86-64), and both reproduced the
+md5 of A, B and the base file. The full rebuild is not, for two reasons we measured: polars' multi-threaded `group_by` returns rows in a
 run-dependent order (e.g. the candidate-pair and per-(pair, hand) tables of step s01 have identical content but a different row order in
 every run), and it sums floats in a run-dependent order (two runs of `tw_pc.py` on identical inputs differ at ~1e-15). Several learners
 depend on row order (the seeded sampling of unlabelled pairs, LightGBM bagging and bin sampling, CatBoost Bernoulli subsampling), so the
-retrained models differ slightly from the competition-time ones. `tools/compare_submissions.py` quantifies the difference.
+retrained models differ slightly from the competition-time ones. `tools/compare_submissions.py` quantifies the difference. Our clean-room
+run (fresh virtual environment from `requirements.txt`, only the raw tables and the frozen inputs) against the submitted A: risk Spearman
+0.981; top-300 / top-600 / top-1000 overlap 288 / 573 / 928; same behaviour label for 94.9% of the pairs; on the submitted top-600 pairs,
+95.5% of the evidence lists are identical (4.94 of 5 hands shared on average).
 All seeds are fixed; given identical input files every script we re-ran reproduced its original output bit for bit. This includes the
 12-seed training of the evidence-decoder detectors (`hb_train3.py`, 60 boosters identical); it is not part of the replay only because it
 reads development-side tables that we do not publish (the replay uses the trained detectors from the checkpoint).
