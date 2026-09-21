@@ -12,8 +12,8 @@ There are two ways to check the submission, both CPU only:
 
 | | what is re-run | inputs | result | time (Apple M4, 10 cores) |
 |---|---|---|---|---|
-| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.3 GB) | **byte-identical** A, B and base file (md5 checked) | ~30 min |
-| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.3 GB) | an equivalent file, not byte-identical (see §5) | ~N h |
+| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked) | ~30–40 min |
+| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical (see §5) | ~N h |
 
 The Kaggle notebook _link_ runs the replay on Kaggle.
 
@@ -33,7 +33,8 @@ kaggle competitions download -c detect-suspicious-value-transfers-in-poker -p 1_
 
 ```bash
 # checkpoint: competition-time intermediate artifacts, unpacked at the repository root
-kaggle datasets download <owner>/<checkpoint-dataset> -p . && tar -xf <checkpoint>.tar
+kaggle datasets download seantangth/tpds-9th-place-artifacts -f checkpoint.tar -p .
+[ -f checkpoint.tar.zip ] && unzip -q checkpoint.tar.zip; tar -xf checkpoint.tar
 PY=.venv/bin/python ./replay.sh
 ```
 
@@ -45,7 +46,8 @@ prints three md5 checks, which should all read "identical to the submitted file"
 
 ```bash
 # frozen inputs: outputs of three cloud stages + small configuration files, unpacked at the repository root
-kaggle datasets download <owner>/<frozen-inputs-dataset> -p . && tar -xf <frozen_inputs>.tar
+kaggle datasets download seantangth/tpds-9th-place-artifacts -f frozen_inputs.tar -p .
+[ -f frozen_inputs.tar.zip ] && unzip -q frozen_inputs.tar.zip; tar -xf frozen_inputs.tar
 PY=.venv/bin/python ./run_all.sh          # one log per step in logs/; peak RSS ~6 GB
 .venv/bin/python tools/compare_submissions.py <submitted A> submission.csv
 ```
