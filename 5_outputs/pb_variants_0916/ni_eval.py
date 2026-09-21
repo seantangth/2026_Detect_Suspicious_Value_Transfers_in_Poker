@@ -126,7 +126,9 @@ NI = [c for c in hf.columns if c.startswith('ni_')]; hf = hf.with_columns([pl.co
 pbe = pl.read_parquet(PROC / 'pb_evaluation.parquet'); out = pbe.join(hf, on=['pair_id', 'hand_id'], how='full', coalesce=True)
 dev = pl.read_parquet(PROC / 'pbni_development.parquet'); assert out.columns == dev.columns, (out.columns, dev.columns)
 out.write_parquet(PROC / 'pbni_evaluation.parquet'); log('pbni_evaluation.parquet', out.shape, '| decisions', n_dec, '| rows with ni', int(out['ni_lr_total_max'].is_not_null().sum()), '| rows with pb', int(out['pb_n_dec'].is_not_null().sum()))
-sub = pl.read_csv(ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv', columns=['pair_id', 'risk_score']).with_columns(pl.col('risk_score').rank(descending=True).alias('rk'))
+_v032 = ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv'   # (release) research-era submission, feeds the printed column means only
+if not _v032.exists(): log('NI_EVAL_DONE'); raise SystemExit(0)
+sub = pl.read_csv(_v032, columns=['pair_id', 'risk_score']).with_columns(pl.col('risk_score').rank(descending=True).alias('rk'))
 t500 = out.join(sub.filter(pl.col('rk') <= 500).select('pair_id'), on='pair_id', how='semi')
 print('column means  dev(OOF, positive pairs) | eval top-500 pairs | eval all 8000:')
 for c in NI: print(f'  {c:26s} {float(dev[c].mean()):+.4f} | {float(t500[c].mean()):+.4f} | {float(out[c].mean()):+.4f}   nonnull {float(dev[c].is_not_null().mean()):.3f}/{float(t500[c].is_not_null().mean()):.3f}')

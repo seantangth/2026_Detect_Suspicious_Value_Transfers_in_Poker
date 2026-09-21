@@ -59,7 +59,9 @@
   "patch: if all(c in pl.read_parquet_schema(REV / 'gate_frame.parquet') for c in NI):   # (release)",
   "patch:     bad += (dmax or 0) > 1e-4 or nn > 0; print(f'  {c:26s} max|diff| {dmax}  null mismatch"
  ],
- "5_outputs/pb_variants_0916/ni_eval.py": [],
+ "5_outputs/pb_variants_0916/ni_eval.py": [
+  "patch: _v032 = ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv'   # (release) r"
+ ],
  "5_outputs/revise_0915/ni_corrected2.py": [
   "patch: _sc = ROOT / '5_outputs/evsel_0915/dev_candidates_scripts.parquet'   # (release) research-"
  ],

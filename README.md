@@ -32,9 +32,9 @@ kaggle competitions download -c detect-suspicious-value-transfers-in-poker -p 1_
 ## 2. Replay (byte-identical)
 
 ```bash
-# checkpoint: competition-time intermediate artifacts, unpacked at the repository root
-kaggle datasets download seantangth/tpds-9th-place-artifacts -f checkpoint.tar -p .
-[ -f checkpoint.tar.zip ] && unzip -q checkpoint.tar.zip; tar -xf checkpoint.tar
+# artifacts (4.7 GB): Kaggle serves the uploaded archives as the folders checkpoint/, frozen_inputs/ and code/
+kaggle datasets download seantangth/tpds-9th-place-artifacts -p artifacts --unzip
+cp -R artifacts/checkpoint/. .            # competition-time intermediate files, at the repository root
 PY=.venv/bin/python ./replay.sh
 ```
 
@@ -44,12 +44,13 @@ prints three md5 checks, which should all read "identical to the submitted file"
 
 ## 3. Full rebuild (from the raw tables)
 
+In a fresh clone (set up as in §1, without the checkpoint):
+
 ```bash
-# frozen inputs: outputs of three cloud stages + small configuration files, unpacked at the repository root
-kaggle datasets download seantangth/tpds-9th-place-artifacts -f frozen_inputs.tar -p .
-[ -f frozen_inputs.tar.zip ] && unzip -q frozen_inputs.tar.zip; tar -xf frozen_inputs.tar
+# frozen inputs (downloaded in §2): outputs of three cloud stages + small configuration files, at the repository root
+cp -R artifacts/frozen_inputs/. .
 PY=.venv/bin/python ./run_all.sh          # one log per step in logs/; peak RSS ~6 GB
-.venv/bin/python tools/compare_submissions.py <submitted A> submission.csv
+.venv/bin/python tools/compare_submissions.py artifacts/submission_TWFWDp_HB3k12_FINALD2_split_f2p_kdt3_w90.csv submission.csv
 ```
 
 | steps | what | main code |
