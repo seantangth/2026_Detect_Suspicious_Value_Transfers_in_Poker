@@ -68,7 +68,9 @@
  "7_reproduce/merge_seed_sets.py": [],
  "5_outputs/research_0919/hb_common.py": [],
  "5_outputs/research_0919/ci_feats.py": [],
- "5_outputs/research_0919/hb_train3.py": [],
+ "5_outputs/research_0919/hb_train3.py": [
+  "patch: _fo = ROOT / '5_outputs/revise_0917/family_clf_dev_oof.parquet'   # (release) optional: ro"
+ ],
  "5_outputs/research_0919/hb_apply3.py": [
   ".venv python -> sys.executable (1x)"
  ],
@@ -85,12 +87,24 @@
  "7_reproduce/lambda_0912/cloud/make_synth_tables.py": [],
  "7_reproduce/lambda_0912/cloud/model.py": [],
  "7_reproduce/lambda_0912/cloud/outputs.py": [],
- "7_reproduce/lambda_0912/cloud/run_stage.sh": [],
- "7_reproduce/lambda_0912/cloud/setup.sh": [],
+ "7_reproduce/lambda_0912/cloud/run_stage.sh": [
+  "patch: R=\"${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}\"   # (release) machine root, configurable\n",
+  "patch: R=os.environ.get('TPDS_CLOUD_ROOT', '/home/ubuntu/tpds'); m=json.load("
+ ],
+ "7_reproduce/lambda_0912/cloud/setup.sh": [
+  "patch: cd \"${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}/data\" && ",
+  "patch: df -h \"${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}\" | tail -1"
+ ],
  "7_reproduce/lambda_0912/cloud/t4_shards.py": [],
  "7_reproduce/lambda_0912/cloud/train.py": [],
- "7_reproduce/lambda_0913/cloud/pairpol.py": [],
- "7_reproduce/lambda_0913/cloud/pairpol_accept.py": [],
- "7_reproduce/lambda_0913/cloud/run_pairpol.sh": [],
+ "7_reproduce/lambda_0913/cloud/pairpol.py": [
+  "patch: sys.path.insert(0, HERE)\nsys.path.insert(1, os.path.join(HERE, os.pardir, os.pardir, 'lamb"
+ ],
+ "7_reproduce/lambda_0913/cloud/pairpol_accept.py": [
+  "patch: sys.path.insert(0, HERE)\nsys.path.insert(1, os.path.join(HERE, os.pardir, os.pardir, 'lamb"
+ ],
+ "7_reproduce/lambda_0913/cloud/run_pairpol.sh": [
+  "patch: R=\"${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}\"   # (release) machine root, configurable\n"
+ ],
  "7_reproduce/lambda_0913/cloud/synth_selftest.py": []
 }

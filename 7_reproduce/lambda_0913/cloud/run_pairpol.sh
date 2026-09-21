@@ -3,7 +3,7 @@
 # 失敗一律非 0 退出；不用 echo 判定成功。
 set -euo pipefail
 STAGE="${1:?smoke|full}"
-R=/home/ubuntu/tpds
+R="${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}"   # (release) machine root, configurable
 D="$R/data"
 cd "$R/cloud"
 export PYTHONUNBUFFERED=1

@@ -217,7 +217,8 @@ def hb_scores(route):
 
 truth = {r['pair_id']: set(r['hand_id']) for r in evd.group_by('pair_id').agg(pl.col('hand_id')).to_dicts()}
 ids = sorted(truth); fam_true = dict(zip(pos['pair_id'].to_list(), pos['behavior_family'].to_list()))
-fo_ = pl.read_parquet(ROOT / '5_outputs/revise_0917/family_clf_dev_oof.parquet')
+_fo = ROOT / '5_outputs/revise_0917/family_clf_dev_oof.parquet'   # (release) optional: routes the printed development gauges only
+fo_ = pl.read_parquet(_fo) if _fo.exists() else pl.DataFrame({'pair_id': [], 'fam_new': []}, schema={'pair_id': pl.Utf8, 'fam_new': pl.Utf8})
 fam_pred = dict(zip(fo_['pair_id'].to_list(), fo_['fam_new'].to_list()))   # labelled pairs carry their P... id directly
 n_mis = sum(fam_pred.get(p) not in (None, fam_true[p]) for p in ids); n_null = sum(fam_pred.get(p) is None for p in ids)
 log(f'predicted-family routing: {n_mis} misrouted, {n_null} without prediction (fall back to truth)')

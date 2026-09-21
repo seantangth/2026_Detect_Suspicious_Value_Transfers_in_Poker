@@ -14,6 +14,7 @@ import polars as pl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(HERE, os.pardir, os.pardir, 'lambda_0912', 'cloud'))   # (release) gbfeat.py in the repository layout
 from gbfeat import Feats, FEAT_BASE, CAT_BASE          # noqa: E402
 from pairpol import build_model, nll_rows, EMB, PHASES, log, CLIP   # noqa: E402
 

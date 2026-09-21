@@ -2,7 +2,8 @@
 
 Kaggle competition: [Detect Suspicious Value Transfers in Poker](https://www.kaggle.com/competitions/detect-suspicious-value-transfers-in-poker) (Slash).
 Team `seantangth`. Solution write-up: _link_. Case reviews: [`CASE_REVIEWS.md`](CASE_REVIEWS.md).
-Artifacts: Kaggle dataset [`seantangth/tpds-9th-place-artifacts`](https://www.kaggle.com/datasets/seantangth/tpds-9th-place-artifacts).
+Artifacts: Kaggle dataset [`seantangth/tpds-9th-place-artifacts`](https://www.kaggle.com/datasets/seantangth/tpds-9th-place-artifacts) — private,
+because it is derived from the competition data (§4); it is shared with the competition hosts, and other participants can ask for access.
 
 | selected submission | file | md5 | public | private |
 |---|---|---|---|---|
@@ -17,7 +18,7 @@ There are two ways to check the submission, both CPU only:
 | **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical (see §5) | ~4 h (Apple M4, 10 cores) |
 
 The Kaggle notebook [TPDS 9th place - replay of the selected submission](https://www.kaggle.com/code/seantangth/tpds-9th-place-replay-of-the-selected-submission)
-runs the replay in a fresh Kaggle CPU session (Python 3.13 and the pinned packages are installed by the notebook); its run reproduced all
+(private like the dataset, shared with the hosts) runs the replay in a fresh Kaggle CPU session (Python 3.13 and the pinned packages are installed by the notebook); its run reproduced all
 three files byte for byte.
 
 ## 1. Setup
@@ -35,7 +36,7 @@ kaggle competitions download -c detect-suspicious-value-transfers-in-poker -p 1_
 ## 2. Replay (byte-identical)
 
 ```bash
-# artifacts (4.7 GB): Kaggle serves the uploaded archives as the folders checkpoint/, frozen_inputs/ and code/
+# artifacts (4.7 GB, needs access to the private dataset): Kaggle serves the uploaded archives as the folders checkpoint/, frozen_inputs/ and code/
 kaggle datasets download seantangth/tpds-9th-place-artifacts -p artifacts --unzip
 cp -R artifacts/checkpoint/. .            # competition-time intermediate files, at the repository root
 PY=.venv/bin/python ./replay.sh
@@ -74,11 +75,11 @@ PY=.venv/bin/python ./run_all.sh          # one log per step in logs/; peak RSS 
 
 Directory names under `5_outputs/` are those of the research project, so every script can be traced to its experiment log; outputs are
 written next to the code, as during the competition. `release_changes.json` lists every edit made to the research code for this release:
-path handling, one `exec` of a code slice replaced by an import of the identical frozen module, and research-only side outputs and
-diagnostics made optional. Small builders that were run ad hoc during the competition were re-written in `tools/` and checked against the
+path handling (including a configurable root for the cloud-stage scripts), one `exec` of a code slice replaced by an import of the
+identical frozen module, and research-only side outputs and diagnostics made optional. Small builders that were run ad hoc during the competition were re-written in `tools/` and checked against the
 original tables: identical content, except `build_nllx.py`, which matches to within 2e-6 (float32 summation order).
 
-## 4. What is shipped, and what is not
+## 4. Artifacts
 
 **Frozen inputs** (`frozen_inputs.md5`, needed by the full rebuild):
 
@@ -86,8 +87,8 @@ original tables: identical content, except `build_nllx.py`, which matches to wit
 |---|---|---|
 | `5_outputs/seqnll_0912/gbnll_{player,action}.parquet` | `7_reproduce/lambda_0912/cloud/` (LightGBM normal-behaviour model, rented CPU) | cloud stage ([CLOUD_STAGES.md](CLOUD_STAGES.md)) |
 | `5_outputs/pairpol_0913/*`, `1_data/processed/pairpol/*` | `7_reproduce/lambda_0913/cloud/pairpol.py` (1× A10) | cloud stage |
-| `5_outputs/pokerbench_0915/{prompts,prompts_eval_top8000,scores,scores_eval_top8000}.parquet` | `score_vllm.py` with `YiPz/llama3-8b-pokerbench-sft` (8× A100) | cloud stage; prompt tables are keys only (no hand text) |
-| `5_outputs/models/v5/{hand_features.json,folds_by_table.json}`, `1_data/processed/suspect_hidden_positives.parquet` | first baseline run | configuration: hand-model feature list, table folds, 171 unlabelled development pairs given weight 0 |
+| `5_outputs/pokerbench_0915/{prompts,prompts_eval_top8000,scores,scores_eval_top8000}.parquet` | `score_vllm.py` with `YiPz/llama3-8b-pokerbench-sft` (8× A100) | cloud stage; the prompt tables keep the decision keys, the actor and the observed and legal action types, not the prompt text |
+| `5_outputs/models/v5/{hand_features.json,folds_by_table.json}`, `1_data/processed/suspect_hidden_positives.parquet` | first baseline run | configuration: hand-model feature list (also in this repository), table folds, 171 unlabelled development pairs given weight 0 |
 | `5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet` | an earlier evidence run | (pair, hand) keys of the 8,000 evaluation pairs with PokerBench features |
 | `5_outputs/revise_0917/family_clf_dev_oof.parquet` | development family-classifier OOF | only feeds a development score printed by `hb_train3.py` |
 
@@ -95,9 +96,14 @@ original tables: identical content, except `build_nllx.py`, which matches to wit
 of the three training worlds and of evaluation, hand scores, evaluation per-(pair, hand) rows, the ranker evidence scores, the 60 decoder
 detectors, the base evidence file). They were listed by tracing the file reads of each replayed script.
 
-**Not shipped:** no raw competition table, no hand text, no label or evidence list. The four development tables of the checkpoint that carry
-labels have their label columns emptied, and the development prompt keys store each positive pair as an index into the sorted list of
-positive pair IDs; both are resolved at run time from your own copy of the competition files.
+**Why the artifacts are not public.** They contain no raw competition table and no label or evidence list: the label columns of the four
+labelled development tables of the checkpoint are emptied and re-attached at run time from your copy of the competition files. They are
+nevertheless derived from the competition data: the development PokerBench tables cover exactly the decisions of the positive development
+pairs (so they identify those pairs) and hold the observed action types, and the checkpoint holds engineered per-hand features of the
+evaluation hands. The competition data is for competition use only, so the dataset is shared with the hosts instead of being published.
+Without it, the outputs of the three cloud stages have to be regenerated with the code in `7_reproduce/` and `5_outputs/pokerbench_0915/`
+([CLOUD_STAGES.md](CLOUD_STAGES.md)); the PokerBench stage also needs the (pair, hand) keys of the evaluation pairs it scored, which come
+from earlier model runs and are only in the dataset.
 
 ## 5. Determinism
 
@@ -112,12 +118,14 @@ run (fresh virtual environment from `requirements.txt`, only the raw tables and 
 95.5% of the evidence lists are identical (4.94 of 5 hands shared on average).
 All seeds are fixed; given identical input files every script we re-ran reproduced its original output bit for bit. This includes the
 12-seed training of the evidence-decoder detectors (`hb_train3.py`, 60 boosters identical); it is not part of the replay only because it
-reads development-side tables that we do not publish (the replay uses the trained detectors from the checkpoint).
+reads development-side tables that are not in the checkpoint (the replay uses the trained detectors from the checkpoint).
 
 ## 6. Rules compliance
 
-Coordination is inferred from gameplay only. IDs are join keys (and hash seeds for two cross-fitting splits); chronology comes from
-`hands.started_at` (no ties within a table), never from row or file order; `players.parquet` is not read; no evaluation labels and no manual
+Coordination is inferred from gameplay only. IDs are used as join keys, as entity indices (the pair-conditional policy model learns an
+embedding per player and chronological quintile and one per ordered player pair, from their actions) and as hash seeds for two
+cross-fitting splits; the ID strings themselves are never used as features. Chronology comes from `hands.started_at` (no ties within a
+table), never from row or file order; `players.parquet` is not read; no evaluation labels and no manual
 labelling are used. The external model `YiPz/llama3-8b-pokerbench-sft` (Llama 3 Community License) is used only to score decisions.
 
 ## License

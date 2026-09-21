@@ -19,7 +19,8 @@ step() {
   else echo "!!! $name FAILED (see logs_replay/$name.log)"; tail -20 "logs_replay/$name.log"; exit 1; fi
 }
 md5of() { "$PY" -c "import hashlib,sys; print(hashlib.md5(open(sys.argv[1],'rb').read()).hexdigest())" "$1"; }
-expect_md5() { local got; got=$(md5of "$1"); if [ "$got" = "$2" ]; then echo "[identical to the submitted file] $3: $got"; else echo "[DIFFERENT] $3: got $got, expected $2"; fi; }
+N_DIFF=0
+expect_md5() { local got; got=$(md5of "$1"); if [ "$got" = "$2" ]; then echo "[identical to the submitted file] $3: $got"; else echo "[DIFFERENT] $3: got $got, expected $2"; N_DIFF=$((N_DIFF + 1)); fi; }
 
 step r0_check_inputs   "$PY" tools/check_inputs.py raw_inputs.md5 checkpoint.md5
 step r1_attach_labels  "$PY" tools/attach_dev_labels.py
@@ -34,3 +35,5 @@ echo "================ checks"
 expect_md5 "$SUB/submission_FINAL_D2_v040ev_famclf.csv"            92de95cce5ae8d8451f9f77b6f5e1a09 "base file FINAL-D2 (not submitted)"
 expect_md5 "$SUB/submission_HB3k12_FINALD2_split_f2p_kdt3_w90.csv" f17b3b4de833994b8ec994546f3f802b "selected submission B (private 0.92414)"
 expect_md5 submission.csv                                           c303970ed74faa833cf671ebdfd4efb6 "selected submission A (private 0.92677) = submission.csv"
+if [ "$N_DIFF" -gt 0 ]; then echo "REPLAY FAILED: $N_DIFF of 3 files differ from the submitted ones (outputs and logs_replay/ are kept for diagnosis)"; exit 1; fi
+echo "REPLAY OK: all 3 files are byte-identical to the submitted ones"

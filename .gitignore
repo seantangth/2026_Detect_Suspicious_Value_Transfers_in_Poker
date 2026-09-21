@@ -9,3 +9,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+# the hand-model feature list (configuration, no competition data)
+!/5_outputs/models/
+!/5_outputs/models/v5/
+!/5_outputs/models/v5/hand_features.json

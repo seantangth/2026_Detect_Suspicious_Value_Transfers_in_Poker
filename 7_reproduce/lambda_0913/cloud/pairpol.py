@@ -25,6 +25,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(HERE, os.pardir, os.pardir, 'lambda_0912', 'cloud'))   # (release) gbfeat.py in the repository layout
 from gbfeat import Feats, FEAT_BASE, CAT_BASE     # noqa: E402  （重用 09-12 的特徵定義）
 
 T0 = time.time()

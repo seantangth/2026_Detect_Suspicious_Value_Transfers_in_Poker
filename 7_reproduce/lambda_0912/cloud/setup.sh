@@ -8,6 +8,6 @@ PIP=(python3 -m pip install --quiet --no-input)
 "${PIP[@]}" -U polars pyarrow numba 2>/dev/null || "${PIP[@]}" --break-system-packages -U polars pyarrow numba
 python3 -c "import polars,pyarrow,numba,numpy;print('polars',polars.__version__,'pyarrow',pyarrow.__version__,'numba',numba.__version__,'numpy',numpy.__version__)"
 echo "== 資料 md5（與本機核對）=="
-cd /home/ubuntu/tpds/data && md5sum raw/*.parquet raw/*.csv processed/*.parquet
-echo "== 磁碟 =="; df -h /home/ubuntu | tail -1
+cd "${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}/data" && md5sum raw/*.parquet raw/*.csv processed/*.parquet
+echo "== 磁碟 =="; df -h "${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}" | tail -1
 echo SETUP_OK

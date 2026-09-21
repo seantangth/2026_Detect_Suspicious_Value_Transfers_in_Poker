@@ -2,7 +2,7 @@
 # 用法: run_stage.sh smoke|throughput|full|gbnll_full
 set -euo pipefail
 STAGE="${1:?smoke|throughput|full|gbnll_full}"
-R=/home/ubuntu/tpds
+R="${TPDS_CLOUD_ROOT:-/home/ubuntu/tpds}"   # (release) machine root, configurable
 D="$R/data"
 cd "$R/cloud"
 export PYTHONUNBUFFERED=1
@@ -28,7 +28,7 @@ case "$STAGE" in
     done
     python3 - <<'PY'
 import pyarrow.parquet as pq, json, glob, os
-R='/home/ubuntu/tpds'; m=json.load(open(R+'/tables_s/meta.json'))
+R=os.environ.get('TPDS_CLOUD_ROOT', '/home/ubuntu/tpds'); m=json.load(open(R+'/tables_s/meta.json'))
 for P in ('seqnll','gbnll'):
     for f,e in [(f'{P}_action.parquet',m['N_A']),(f'{P}_player.parquet',m['N_S']),(f'{P}_pair.parquet',m['N_H']*30)]:
         n=pq.ParquetFile(f'{R}/out_s/{f}').metadata.num_rows
