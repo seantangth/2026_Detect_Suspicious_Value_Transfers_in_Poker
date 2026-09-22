@@ -9,7 +9,16 @@
 __pycache__/
 *.pyc
 .DS_Store
-# the hand-model feature list (configuration, no competition data)
+# configuration and key files of the full rebuild (IDs and feature names only, no competition data): hand-model feature list, table folds,
+# the 171 unlabelled development pairs given weight 0, (pair, hand) keys of the 8,000 evaluation pairs scored with PokerBench
+!/1_data/
+/1_data/*
+!/1_data/processed/
+/1_data/processed/*
+!/1_data/processed/suspect_hidden_positives.parquet
 !/5_outputs/models/
 !/5_outputs/models/v5/
 !/5_outputs/models/v5/hand_features.json
+!/5_outputs/models/v5/folds_by_table.json
+!/5_outputs/models/v5nb/
+!/5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet

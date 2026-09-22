@@ -2,14 +2,14 @@
 
 Three feature sources were computed on rented machines during the competition. Their outputs are in the artifacts dataset (md5 in
 `frozen_inputs.md5`); `run_all.sh` reads them and does not re-run the stages, and they were not re-run for this release. The code and the
-commands that were used are below. gbnll and pairpol use no labels; the development PokerBench prompts cover the candidate hands of the
+commands that were used are below; after regenerating the outputs, run `run_all.sh` with `TPDS_REGENERATED_CLOUD=1` (README §3). gbnll and pairpol use no labels; the development PokerBench prompts cover the candidate hands of the
 372 positive development pairs, on which the evidence rankers are trained.
 
 ## Layout and environment
 
 The scripts ran with the machine root `/home/ubuntu/tpds`: `<root>/cloud` held the files of both `7_reproduce/lambda_0912/cloud` and
 `7_reproduce/lambda_0913/cloud`, `<root>/data/raw` the competition files and `<root>/data/processed` four tables written by step s01 of
-`run_all.sh`. `7_reproduce/cloud_layout.sh <root>` assembles this layout (run step s01 first); `export TPDS_CLOUD_ROOT=<root>` points
+`run_all.sh`. `bash 7_reproduce/cloud_layout.sh <root>` assembles this layout (run step s01 first); `export TPDS_CLOUD_ROOT=<root>` points
 `run_stage.sh` and `run_pairpol.sh` to it (default `/home/ubuntu/tpds`). `pairpol.py --help` and the other scripts also run in place.
 
 Environment: Lambda Cloud Ubuntu image with PyTorch and CUDA, plus `polars pyarrow numba lightgbm` (`setup.sh`), NumPy 1.26.4 (the image's
@@ -60,8 +60,10 @@ ran on 2026-09-22 with numba 0.67, NumPy 2.5.3, polars 1.44.1, PyTorch 2.14 and 
   - development: `python 5_outputs/pokerbench_0915/build_prompts.py` → `prompts.parquet`, `prompts_unique.parquet`: every decision of a
     pair member in the candidate hands of the 372 positive pairs (keys from `tools/build_gate_keys.py`, step s31a);
   - evaluation: `build_prompts_eval.py 8000` → `prompts_eval_top8000.parquet`, `prompts_eval_unique_top8000.parquet`: the candidate hands
-    of the 8,000 pairs ranked highest by a research-time risk file. That file and its candidate list come from earlier runs that are not
-    part of this repository, so this step cannot be re-run from here; its output is in the dataset.
+    of the 8,000 pairs ranked highest by a research-time risk file. Without the two research-time files it reads the resulting (pair, hand)
+    keys from `5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet` (in this repository).
+  - Rebuilt this way on 2026-09-22 (from the raw tables, the step-s01 tables and the step-s31a keys), both prompt tables match the
+    scored ones row for row.
 - Scoring on 8× A100 (`vllm==0.11.0`, `transformers==4.57.1`; temperature 0, top-25 log-probs of the first token after `<action>`):
   ```bash
   for i in 0 1 2 3 4 5 6 7; do CUDA_VISIBLE_DEVICES=$i python score_vllm.py --in prompts_unique.parquet --shard $i/8 --out scores_shard$i.parquet & done; wait

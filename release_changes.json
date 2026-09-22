@@ -75,7 +75,9 @@
   ".venv python -> sys.executable (1x)"
  ],
  "5_outputs/pokerbench_0915/build_prompts.py": [],
- "5_outputs/pokerbench_0915/build_prompts_eval.py": [],
+ "5_outputs/pokerbench_0915/build_prompts_eval.py": [
+  "patch: _sub, _cand = ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv', ROOT / '"
+ ],
  "5_outputs/pokerbench_0915/score_vllm.py": [],
  "7_reproduce/lambda_0912/cloud/accept.py": [],
  "7_reproduce/lambda_0912/cloud/build_tables.py": [],

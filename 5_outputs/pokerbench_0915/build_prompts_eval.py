@@ -10,10 +10,15 @@ SUIT = {'h': 'Heart', 'd': 'Diamond', 'c': 'Club', 's': 'Spade'}
 def card(c, of='Of'): return f'{RANK[c[0]]} {of} {SUIT[c[1]]}'
 def fmt(x):
     x = round(float(x), 1); return str(int(x)) if abs(x - int(x)) < 1e-9 else f'{x:.1f}'
-sub = pl.read_csv(ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv').select(['pair_id', 'risk_score']).sort('risk_score', descending=True).head(K)
-cand = pl.scan_parquet(ROOT / '5_outputs/models/v5nb/evidence_eval_onscvx4.parquet')
-cols = cand.collect_schema().names(); keep = ['pair_id', 'hand_id'] + [c for c in ('a', 'b') if c in cols]
-d = cand.select(keep).join(sub.lazy().select('pair_id'), on='pair_id', how='semi').collect().unique()
+_sub, _cand = ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv', ROOT / '5_outputs/models/v5nb/evidence_eval_onscvx4.parquet'
+if _sub.exists() and _cand.exists():   # research-time inputs: top-K pairs of the v032 risk file and their candidate hands
+    sub = pl.read_csv(ROOT / '5_outputs/submissions/submission_v032cand_v5xcp2_eqx4.csv').select(['pair_id', 'risk_score']).sort('risk_score', descending=True).head(K)
+    cand = pl.scan_parquet(ROOT / '5_outputs/models/v5nb/evidence_eval_onscvx4.parquet')
+    cols = cand.collect_schema().names(); keep = ['pair_id', 'hand_id'] + [c for c in ('a', 'b') if c in cols]
+    d = cand.select(keep).join(sub.lazy().select('pair_id'), on='pair_id', how='semi').collect().unique()
+else:   # (release) the resulting (pair, hand) keys of the top 8,000 pairs, shipped in the repository
+    assert K == 8000, 'the shipped keys cover the top 8,000 pairs'
+    d = pl.read_parquet(ROOT / '5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet', columns=['pair_id', 'hand_id']).unique()
 if 'a' not in d.columns:
     ep = pl.read_csv(RAW / 'evaluation_pairs.csv'); pc = [c for c in ep.columns if c.startswith('player')][:2]
     d = d.join(ep.select(['pair_id', pl.col(pc[0]).alias('a'), pl.col(pc[1]).alias('b')]), on='pair_id', how='inner')

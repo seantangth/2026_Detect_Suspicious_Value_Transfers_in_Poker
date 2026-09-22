@@ -57,6 +57,10 @@ PY=.venv/bin/python ./run_all.sh          # one log per step in logs/; peak RSS 
 .venv/bin/python tools/compare_submissions.py artifacts/submission_TWFWDp_HB3k12_FINALD2_split_f2p_kdt3_w90.csv submission.csv
 ```
 
+Without access to the dataset, regenerate the cloud-stage outputs into the paths of §4 ([CLOUD_STAGES.md](CLOUD_STAGES.md)) and run
+`TPDS_REGENERATED_CLOUD=1 PY=.venv/bin/python ./run_all.sh`: a re-run does not reproduce those outputs bit for bit, so the input check
+then only verifies that they are present (the configuration and key files in this repository are still checked by md5).
+
 | steps | what | main code |
 |---|---|---|
 | s01 | per-hand / per-seat tables, candidate pairs, one row per (pair, shared hand) | `3_src/tpds_features.py` |
@@ -88,8 +92,8 @@ original tables: identical content, except `build_nllx.py`, which matches to wit
 | `5_outputs/seqnll_0912/gbnll_{player,action}.parquet` | `7_reproduce/lambda_0912/cloud/` (LightGBM normal-behaviour model, rented CPU) | cloud stage ([CLOUD_STAGES.md](CLOUD_STAGES.md)) |
 | `5_outputs/pairpol_0913/*`, `1_data/processed/pairpol/*` | `7_reproduce/lambda_0913/cloud/pairpol.py` (1× A10) | cloud stage |
 | `5_outputs/pokerbench_0915/{prompts,prompts_eval_top8000,scores,scores_eval_top8000}.parquet` | `score_vllm.py` with `YiPz/llama3-8b-pokerbench-sft` (8× A100) | cloud stage; the prompt tables keep the decision keys, the actor and the observed and legal action types, not the prompt text |
-| `5_outputs/models/v5/{hand_features.json,folds_by_table.json}`, `1_data/processed/suspect_hidden_positives.parquet` | first baseline run | configuration: hand-model feature list (also in this repository), table folds, 171 unlabelled development pairs given weight 0 |
-| `5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet` | an earlier evidence run | (pair, hand) keys of the 8,000 evaluation pairs with PokerBench features |
+| `5_outputs/models/v5/{hand_features.json,folds_by_table.json}`, `1_data/processed/suspect_hidden_positives.parquet` | first baseline run | configuration: hand-model feature list, table folds, 171 unlabelled development pairs given weight 0 (also in this repository) |
+| `5_outputs/models/v5nb/evidence_eval_pfonscvxpb4.parquet` | an earlier evidence run | (pair, hand) keys of the 8,000 evaluation pairs with PokerBench features (also in this repository) |
 | `5_outputs/revise_0917/family_clf_dev_oof.parquet` | development family-classifier OOF | only feeds a development score printed by `hb_train3.py` |
 
 **Checkpoint** (`checkpoint.md5`, needed by the replay): the 897 competition-time files that the replayed steps read (per-pair feature tables
@@ -101,9 +105,11 @@ labelled development tables of the checkpoint are emptied and re-attached at run
 nevertheless derived from the competition data: the development PokerBench tables cover exactly the decisions of the positive development
 pairs (so they identify those pairs) and hold the observed action types, and the checkpoint holds engineered per-hand features of the
 evaluation hands. The competition data is for competition use only, so the dataset is shared with the hosts instead of being published.
-Without it, the outputs of the three cloud stages have to be regenerated with the code in `7_reproduce/` and `5_outputs/pokerbench_0915/`
-([CLOUD_STAGES.md](CLOUD_STAGES.md)); the PokerBench stage also needs the (pair, hand) keys of the evaluation pairs it scored, which come
-from earlier model runs and are only in the dataset.
+Without it, the repository and the competition data suffice: re-run the three cloud stages with the code in `7_reproduce/` and
+`5_outputs/pokerbench_0915/` ([CLOUD_STAGES.md](CLOUD_STAGES.md); PokerBench needs GPUs), then `run_all.sh`. The small files this path
+needs besides the code (feature list, table folds, the 171 weight-0 pairs, the (pair, hand) keys of the 8,000 evaluation pairs scored with
+PokerBench) are IDs and feature names only and are in this repository; rebuilt from them, both PokerBench prompt tables match the scored
+ones row for row.
 
 ## 5. Determinism
 
