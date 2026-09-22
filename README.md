@@ -15,7 +15,7 @@ There are two ways to check the submission, both CPU only:
 | | what is re-run | inputs | result | time |
 |---|---|---|---|---|
 | **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked), on macOS arm64 and on Linux x86-64 | ~40 min (Apple M4, 10 cores); ~2 h 10 min (Kaggle CPU notebook, 4 cores) |
-| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical (see §5) | ~4 h (Apple M4, 10 cores) |
+| **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical: as a late submission it scores 0.92557 public, 0.92773 private (§5) | ~4 h (Apple M4, 10 cores) |
 
 The Kaggle notebook [TPDS 9th place - replay of the selected submission](https://www.kaggle.com/code/seantangth/tpds-9th-place-replay-of-the-selected-submission)
 (private like the dataset, shared with the hosts) runs the replay in a fresh Kaggle CPU session (Python 3.13 and the pinned packages are installed by the notebook); its run reproduced all
@@ -121,7 +121,8 @@ depend on row order (the seeded sampling of unlabelled pairs, LightGBM bagging a
 retrained models differ slightly from the competition-time ones. `tools/compare_submissions.py` quantifies the difference. Our clean-room
 run (fresh virtual environment from `requirements.txt`, only the raw tables and the frozen inputs) against the submitted A: risk Spearman
 0.981; top-300 / top-600 / top-1000 overlap 288 / 573 / 928; same behaviour label for 94.9% of the pairs; on the submitted top-600 pairs,
-95.5% of the evidence lists are identical (4.94 of 5 hands shared on average).
+95.5% of the evidence lists are identical (4.94 of 5 hands shared on average). Submitted late, this rebuild scores 0.92557 public and
+0.92773 private (the submitted A: 0.92668 / 0.92677).
 All seeds are fixed; given identical input files every script we re-ran reproduced its original output bit for bit. This includes the
 12-seed training of the evidence-decoder detectors (`hb_train3.py`, 60 boosters identical); it is not part of the replay only because it
 reads development-side tables that are not in the checkpoint (the replay uses the trained detectors from the checkpoint).
