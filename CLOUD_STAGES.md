@@ -27,8 +27,9 @@ ran on 2026-09-22 with numba 0.67, NumPy 2.5.3, polars 1.44.1, PyTorch 2.14 and 
   python3 build_tables.py --data $TPDS_CLOUD_ROOT/data --out $TPDS_CLOUD_ROOT/tables
   python3 gbnll.py --tables $TPDS_CLOUD_ROOT/tables --out $TPDS_CLOUD_ROOT/out --jobs 22 --train-rows 6000000 --rounds 1000
   ```
-  (stage `gbnll_full` of `run_stage.sh`, which also runs `accept.py` and `t4_shards.py`; learning rate 0.05, 127 leaves, seed 0, early
-  stopping on a 3% validation split; recorded in `gbnll_train_info.json`).
+  (learning rate 0.05, 127 leaves, seed 0, early stopping on a 3% validation split; recorded in `gbnll_train_info.json`). On the machine
+  they ran as stage `gbnll_full` of `run_stage.sh`, together with `accept.py`, which needs the Transformer checkpoint of stage `full`,
+  and `t4_shards.py`; the two commands above are all that the rebuild needs.
 - Outputs used: `<root>/out/gbnll_{player,action}.parquet` → `5_outputs/seqnll_0912/` (per hand × player; per action: `nll_type_N`,
   `nll_size_N`, `p_taken_N`, `entropy_N`).
 - Used by: `tools/build_nllx.py`, `5_outputs/eqx_0913/build_presence_contrast*.py`, `5_outputs/research_0919/band/tw_pc.py`.
