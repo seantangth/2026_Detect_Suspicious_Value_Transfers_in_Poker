@@ -1,7 +1,7 @@
 # Detect Suspicious Value Transfers in Poker — 9th place solution (reproduction package)
 
 Kaggle competition: [Detect Suspicious Value Transfers in Poker](https://www.kaggle.com/competitions/detect-suspicious-value-transfers-in-poker) (Slash).
-Team `seantangth`. Solution write-up: _link_. Case reviews: [`CASE_REVIEWS.md`](CASE_REVIEWS.md).
+Team `seantangth`. Solution write-up: [9th place: PU pair ranking on eval-length windows + an evidence-listing decoder](https://www.kaggle.com/competitions/detect-suspicious-value-transfers-in-poker/writeups/9th-place-pu-pair-ranking-on-eval-length-windows). Case reviews: [`CASE_REVIEWS.md`](CASE_REVIEWS.md).
 Artifacts: Kaggle dataset [`seantangth/tpds-9th-place-artifacts`](https://www.kaggle.com/datasets/seantangth/tpds-9th-place-artifacts) — private,
 because it is derived from the competition data (§4); it is shared with the competition hosts, and other participants can ask for access.
 
