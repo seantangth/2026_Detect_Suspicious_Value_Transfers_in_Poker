@@ -14,7 +14,7 @@ There are two ways to check the submission, both CPU only:
 
 | | what is re-run | inputs | result | time |
 |---|---|---|---|---|
-| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked), on macOS arm64 and on Linux x86-64 | ~40 min (Apple M4, 10 cores); ~2 h 10 min (Kaggle CPU notebook, 4 cores) |
+| **1. Replay** — `replay.sh` | the final model layer: stage-1 pair ensemble (LightGBM + CatBoost, both training worlds), stage-2 head re-ranker and rank rule, family classifier, evidence-listing decoder (evaluation inference + decoding), assembly | raw data + **checkpoint** (3.5 GB) | **byte-identical** A, B and base file (md5 checked), on macOS arm64 and on Linux x86-64 | ~25–40 min (Apple M4, 10 cores); ~2 h 10 min (Kaggle CPU notebook, 4 cores) |
 | **2. Full rebuild** — `run_all.sh` | everything from the raw tables | raw data + **frozen inputs** (1.4 GB) | an equivalent file, not byte-identical: as a late submission it scores 0.92557 public, 0.92773 private (§5) | ~4 h (Apple M4, 10 cores) |
 
 The Kaggle notebook [TPDS 9th place - replay of the selected submission](https://www.kaggle.com/code/seantangth/tpds-9th-place-replay-of-the-selected-submission)
